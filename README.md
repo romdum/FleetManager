@@ -1,3 +1,3 @@
 # FleetManager
 
-Plugin WordPress permettant la gestion d'un parc automobile.
+WordPress plugin for Car Fleet Management.
