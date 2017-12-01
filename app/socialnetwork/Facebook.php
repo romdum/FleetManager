@@ -52,15 +52,16 @@ class Facebook
         add_action( 'save_post', array( $this, 'publish'), 10, 3 );
     }
 
-    /**
-     * Method use when user publish or update a post. It will 
-     * use Facebook API and publish on the user wall.
-     *
-     * @param int       $postId  The post ID.
-     * @param \WP_Post  $post    The post object.
-     * @param bool      $update  Whether this is an existing post being updated or not.
-     */
-    public function publish( $postId, $post, $update )
+	/**
+	 * Method use when user publish or update a post. It will
+	 * use Facebook API and publish on the user wall.
+	 *
+	 * @param int $postId The post ID.
+	 * @param \WP_Post $post The post object.
+	 * @param bool $update Whether this is an existing post being updated or not.
+	 * @param bool $retry Retry to connect a second time
+	 */
+    public function publish( $postId, $post, $update, $retry = false )
     {
         try
         {
@@ -102,7 +103,9 @@ class Facebook
 	        FleetManager::$notice->setNotice( 'Une erreur est survenue lors de la publication sur Facebook.' );
 	        FleetManager::$logger->log('Vehicle ' . $postId . ' publication failed. Caused by: ', 'error' );
 	        FleetManager::$logger->log( $e->getMessage(), 'error' );
-	        // TODO: Faire un try again au cas ou l'utilisateur se soit reconnecté #8
+
+	        if( $retry === false )
+				$this->publish( $postId, $post, $update, true);
         }
     }
 
