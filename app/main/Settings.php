@@ -87,6 +87,20 @@ class Settings
             'class' => 'setting',
             'label' => 'Auto-publier sur Facebook'
         ];
+        $settings['socialNetwork'][] = [
+            'id'    => 'FM_fb_appid',
+            'type'  => 'input',
+            'value' => $this->getSetting( 'SocialNetwork', 'facebook', 'appId' ),
+            'class' => 'setting',
+            'label' => 'Facebook App ID'
+        ];
+        $settings['socialNetwork'][] = [
+            'id'    => 'FM_fb_appsecret',
+            'type'  => 'input',
+            'value' => $this->getSetting( 'SocialNetwork', 'facebook', 'appSecret' ),
+            'class' => 'setting',
+            'label' => 'Facebook App Secret'
+        ];
         $settings['main'][] = [
             'id'    => 'FM_logger',
             'type'  => 'checkbox',
@@ -114,6 +128,8 @@ class Settings
         check_admin_referer( 'FM_save_settings' );
 
         $this->setSetting( isset( $_POST['FM_facebook'] ) ? true : false, 'SocialNetwork', 'facebook', 'enabled' );
+        $this->setSetting( $_POST['FM_fb_appid'], 'SocialNetwork', 'facebook', 'appId' );
+        $this->setSetting( $_POST['FM_fb_appsecret'], 'SocialNetwork', 'facebook', 'appSecret' );
         $this->setSetting( isset( $_POST['FM_logger'] ) ? true : false, 'Logger', 'enabled' );
 
         wp_redirect( admin_url( "options-general.php?page=fleetmanager_settings_page" ) );
