@@ -12,7 +12,7 @@ window.fbAsyncInit = function() {
     let expiresIn = "";
 
     FB.init({
-        appId      : '122866341766475',
+        appId      : FB_util.appId,
         xfbml      : true,
         version    : 'v2.10',
         cookie     : true

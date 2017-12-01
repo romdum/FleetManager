@@ -117,6 +117,7 @@ class Facebook
         wp_register_script( 'FM_facebookScript', FleetManager::$PLUGIN_URL . 'ressources/js/facebookScript.js', array( 'jquery' ) );
         wp_localize_script( 'FM_facebookScript', 'FB_util', array(
             'ajaxurl' => admin_url( 'admin-ajax.php' ),
+            'appId' => self::$APP_ID,
             'nonce'   => wp_create_nonce( 'facebookScript' ),
         ) );
         wp_enqueue_script( 'FM_facebookScript' );
