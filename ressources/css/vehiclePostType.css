@@ -1,0 +1,75 @@
+#vehicleImage > .inside{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.vehiclePhotoGroup{
+    border: 1px solid #ccc;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    min-width: 180px;
+    min-height: 180px;
+}
+
+.vehiclePhoto{
+    position: absolute;
+    width: 180px;
+    height: 180px;
+}
+
+.deleteVehiclePhoto{
+    position: relative;
+    margin: 1rem;
+}
+
+.deleteVehiclePhoto:hover{
+	-webkit-animation: shake-top 0.5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+	        animation: shake-top 0.5s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+}
+
+.noVehiclePhoto{
+    width: 80px;
+    height: 80px;
+    font-size: 110px;
+}
+
+#vehicleInfo > .inside{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.vehicleInfo{
+    margin-right: 2rem;
+    width: calc(50% - 2rem);
+    min-width: 300px;
+}
+
+.vehicleInfoInput,
+.vehicleInfoSelect{
+    width: calc(100% - 160px);
+}
+
+.vehicleObs{
+    width: 100%;
+    display: flex;
+    margin-top: 1rem;
+}
+
+.vehicleArea{
+    min-width: 150px;
+    width: calc(100% - 160px - 2rem);
+    padding: 0.4rem;
+    margin-bottom: 0.4rem;
+    margin-left: 4px;
+}
+
+.isSold{
+    width: 100%;
+}
+
+.lastVehiculePublishWidget{
+    padding: 0;
+    margin-top: -1rem;
+}

@@ -1,0 +1,262 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: fleetmanager\n"
+"POT-Creation-Date: 2017-10-01 14:11+0200\n"
+"PO-Revision-Date: 2017-10-01 14:31+0200\n"
+"Last-Translator: Romain Duminil\n"
+"Language-Team: Romain Duminil\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"X-Poedit-Basepath: ../..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e(\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: app/vehicle/Taxonomy.php:18
+msgid "Types"
+msgstr "Types"
+
+#: app/vehicle/Taxonomy.php:19 app/vehicle/VehiclePostType.php:94
+msgid "Type"
+msgstr "Type"
+
+#: app/vehicle/Taxonomy.php:20
+msgid "Tous les types"
+msgstr "All types"
+
+#: app/vehicle/Taxonomy.php:21
+msgid "Éditer le type"
+msgstr "Edit type"
+
+#: app/vehicle/Taxonomy.php:22
+msgid "Voir le type"
+msgstr "Consult type"
+
+#: app/vehicle/Taxonomy.php:23
+msgid "Mettre à jour le type"
+msgstr "Update type"
+
+#: app/vehicle/Taxonomy.php:24
+msgid "Ajouter un type"
+msgstr "Add type"
+
+#: app/vehicle/Taxonomy.php:25
+msgid "Nouveau type"
+msgstr "New type"
+
+#: app/vehicle/Taxonomy.php:26
+msgid "Rechercher parmi les types"
+msgstr "Search types"
+
+#: app/vehicle/Taxonomy.php:27
+msgid "Types les plus utilisés"
+msgstr "Most used"
+
+#: app/vehicle/Taxonomy.php:39
+msgid "Marques"
+msgstr "Brands"
+
+#: app/vehicle/Taxonomy.php:40 app/vehicle/VehiclePostType.php:62
+#: app/vehicle/VehiclePostType.php:95
+msgid "Marque"
+msgstr "Brand"
+
+#: app/vehicle/Taxonomy.php:41
+msgid "Toutes les marques"
+msgstr "All brands"
+
+#: app/vehicle/Taxonomy.php:42
+msgid "Éditer la marque"
+msgstr "Edit brand"
+
+#: app/vehicle/Taxonomy.php:43
+msgid "Voir la marque"
+msgstr "Consult brand"
+
+#: app/vehicle/Taxonomy.php:44
+msgid "Mettre à jour la marque"
+msgstr "Update brand"
+
+#: app/vehicle/Taxonomy.php:45
+msgid "Ajouter une marque"
+msgstr "Add brand"
+
+#: app/vehicle/Taxonomy.php:46
+msgid "Nouvelle marque"
+msgstr "New brand"
+
+#: app/vehicle/Taxonomy.php:47
+msgid "Rechercher parmi les marques"
+msgstr "Search brands"
+
+#: app/vehicle/Taxonomy.php:48
+msgid "Marques les plus utilisées"
+msgstr "Most used"
+
+#: app/vehicle/Taxonomy.php:59
+msgid "Options"
+msgstr "Options"
+
+#: app/vehicle/Taxonomy.php:60
+msgid "Option"
+msgstr "Option"
+
+#: app/vehicle/Taxonomy.php:61
+msgid "Toutes les options"
+msgstr "All options"
+
+#: app/vehicle/Taxonomy.php:62
+msgid "Éditer l'option"
+msgstr "Edit option"
+
+#: app/vehicle/Taxonomy.php:63
+msgid "Voir l'option"
+msgstr "Consult option"
+
+#: app/vehicle/Taxonomy.php:64
+msgid "Mettre à jour l'option"
+msgstr "Update option"
+
+#: app/vehicle/Taxonomy.php:65
+msgid "Ajouter une option"
+msgstr "Add option"
+
+#: app/vehicle/Taxonomy.php:66
+msgid "Nouvelle option"
+msgstr "New option"
+
+#: app/vehicle/Taxonomy.php:67
+msgid "Rechercher parmi les options"
+msgstr "Search options"
+
+#: app/vehicle/Taxonomy.php:68
+msgid "Options les plus utilisées"
+msgstr "Most used"
+
+#: app/vehicle/UI.php:37
+msgid "Informations du véhicules"
+msgstr "Vehicle informations"
+
+#: app/vehicle/UI.php:47
+msgid "Photos"
+msgstr "Pics"
+
+#: app/vehicle/VehiclePostType.php:63 app/vehicle/VehiclePostType.php:99
+msgid "Kilométrage"
+msgstr "Mileage"
+
+#: app/vehicle/VehiclePostType.php:64 app/vehicle/VehiclePostType.php:97
+msgid "Année"
+msgstr "Year"
+
+#: app/vehicle/VehiclePostType.php:65 app/vehicle/VehiclePostType.php:98
+msgid "Prix"
+msgstr "Price"
+
+#: app/vehicle/VehiclePostType.php:100
+msgid "Nombre de portes"
+msgstr "Doors number"
+
+#: app/vehicle/VehiclePostType.php:101
+msgid "Puissance fiscale"
+msgstr "Fiscal power"
+
+#: app/vehicle/VehiclePostType.php:102
+msgid "Puissance din"
+msgstr "Vehicle power"
+
+#: app/vehicle/VehiclePostType.php:103
+msgid "Boîte de vitesse"
+msgstr "Gearbox"
+
+#: app/vehicle/VehiclePostType.php:103
+msgid "Manuelle"
+msgstr "Manual"
+
+#: app/vehicle/VehiclePostType.php:103
+msgid "Automatique"
+msgstr "Automatic"
+
+#: app/vehicle/VehiclePostType.php:104
+msgid "Energie"
+msgstr "Fuel"
+
+#: app/vehicle/VehiclePostType.php:104
+msgid "Essence"
+msgstr "Gasoline"
+
+#: app/vehicle/VehiclePostType.php:104
+msgid "Diesel"
+msgstr "Diesel"
+
+#: app/vehicle/VehiclePostType.php:104
+msgid "Electrique"
+msgstr "Electric"
+
+#: app/vehicle/VehiclePostType.php:105
+msgid "Mise en circulation"
+msgstr "Date of circulation"
+
+#: app/vehicle/VehiclePostType.php:106
+msgid "Couleur"
+msgstr "Color"
+
+#: app/vehicle/VehiclePostType.php:107
+msgid "Garantie"
+msgstr "Warranty"
+
+#: app/vehicle/VehiclePostType.php:108
+msgid "Longueur"
+msgstr "Width"
+
+#: app/vehicle/VehiclePostType.php:109
+msgid "Consommation"
+msgstr "Consommation"
+
+#: app/vehicle/VehiclePostType.php:110
+msgid "Volume du coffre"
+msgstr "Boot volume"
+
+#: app/vehicle/VehiclePostType.php:132
+msgid "Véhicules"
+msgstr "Vehicles"
+
+#: app/vehicle/VehiclePostType.php:133
+msgid "Véhicule"
+msgstr "Vehicle"
+
+#: app/vehicle/VehiclePostType.php:134
+msgid "Tous les véhicules"
+msgstr "All vehicles"
+
+#: app/vehicle/VehiclePostType.php:135
+msgid "Ajouter un véhicule"
+msgstr "Add vehicle"
+
+#: app/vehicle/VehiclePostType.php:136
+msgid "Éditer le véhicule"
+msgstr "Edit vehicle"
+
+#: app/vehicle/VehiclePostType.php:137
+msgid "Nouveau véhicule"
+msgstr "New vehicle"
+
+#: app/vehicle/VehiclePostType.php:138
+msgid "Voir le véhicule"
+msgstr "Consult vehicle"
+
+#: app/vehicle/VehiclePostType.php:139
+msgid "Rechercher parmi les véhicules"
+msgstr "Search vehicles"
+
+#: app/vehicle/VehiclePostType.php:140
+msgid "Pas de véhicule trouvé"
+msgstr "No vehicle found"
+
+#: app/vehicle/VehiclePostType.php:141
+msgid "Pas de véhicule dans la corbeille"
+msgstr "No vehicle in trash"

@@ -1,0 +1,56 @@
+.label{
+    display: inline-block;
+    min-width: 150px;
+}
+
+.inputText,
+.select{
+    min-width: 150px;
+    padding: 0.4rem;
+    margin-bottom: 0.4rem;
+}
+
+.hidden{
+    display: none;
+}
+
+.btn{
+	cursor: pointer;
+	margin-top: 1rem;
+	background-color: #ccc;
+	display: inline-block;
+	font-weight: 400;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	border: 1px solid transparent;
+	padding: .375rem .75rem;
+	font-size: 1rem;
+	line-height: 1.5;
+	border-radius: .25rem;
+	transition: .15s ease-in-out;
+}
+
+.button-danger{
+    background-color: #dc3545;
+    color: #fff;
+    padding: .5rem .75rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    transition: all .15s ease-in-out;
+    text-align: center;
+    cursor: pointer;
+}
+
+.button-danger:hover{
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.settingLabel{
+	min-width: 200px;
+}
