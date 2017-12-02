@@ -1,6 +1,8 @@
 <?php
 
 namespace FleetManager;
+use FleetManager\Vehicle\Vehicle;
+
 /**
  * Class to manage FleetManager settings (located in options table).
  */
@@ -108,7 +110,18 @@ class Settings
             'class' => 'setting',
             'label' => 'Activer les logs'
         ];
-        
+
+        $vehicleInfo = (new Vehicle(0))->getArrayInfos();
+
+        foreach( $vehicleInfo as $info )
+        	$settings['vehicle'][] = [
+		        'id'    => $info['id'],
+		        'type'  => 'checkbox',
+		        'value' => $this->getSetting( 'VehiclePostType', 'display', $info['id'] ) !== false ? 'checked' : '',
+		        'class' => 'setting',
+		        'label' => $info['label']
+	        ];
+
         include FleetManager::$PLUGIN_PATH . 'ressources/views/settingsPage.php';
     }
     
@@ -132,6 +145,12 @@ class Settings
         $this->setSetting( $_POST['FM_fb_appsecret'], 'SocialNetwork', 'facebook', 'appSecret' );
         $this->setSetting( isset( $_POST['FM_logger'] ) ? true : false, 'Logger', 'enabled' );
 
+	    $vehicleInfo = (new Vehicle(0))->getArrayInfos();
+
+	    foreach( $vehicleInfo as $info )
+            $this->setSetting( isset( $_POST[$info['id']] ) ? true : false, 'VehiclePostType', 'display', $info['id'] );
+		    
+        
         wp_redirect( admin_url( "options-general.php?page=fleetmanager_settings_page" ) );
     }
 }

@@ -11,6 +11,13 @@
         	<?php $this->displayOption( $settings['main'] ) ?>
     	</div>
         <div class="settingGroup">
+            <header>
+                <h2>Véhicules</h2>
+                <h4>Affichage des informations</h4>
+            </header>
+		    <?php $this->displayOption( $settings['vehicle'] ) ?>
+        </div>
+        <div class="settingGroup">
     		<header>
     			<h2>Réseaux Sociaux</h2>
     		</header>
