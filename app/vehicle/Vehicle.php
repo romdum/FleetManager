@@ -13,24 +13,25 @@ class Vehicle
 {
 	protected $postId;
 
-	public $isSold = ['id' => 'FM_isSold', 'label' => 'Vendu :', 'type' => 'checkbox'];
-	public $type = ['id' => 'FM_type', 'label' => 'Type :'];
-	public $brand = ['id' => 'FM_brand', 'label' => 'Marque :'];
-	public $model = ['id' => 'FM_model', 'label' => 'Modèle' . ' :'];
-	public $year = ['id' => 'FM_year', 'label' => 'Année :', 'type' => 'number'];
-	public $price = ['id' => 'FM_price', 'label' => 'Prix :', 'type' => 'number'];
-	public $km = ['id' => 'FM_km', 'label' => 'Kilométrage :', 'type' => 'number'];
-	public $doorNbr = ['id' => 'FM_doorNbr', 'label' => 'Nombre de portes :', 'type' => 'number'];
-	public $chf = ['id' => 'FM_chf', 'label' => 'Puissance fiscale :', 'type' => 'number'];
-	public $ch = ['id' => 'FM_ch', 'label' => 'Puissance din :', 'type' => 'number'];
-	public $gearbox = ['id' => 'FM_gearbox', 'label' => 'Boîte de vitesse :', 'type' => ['man' => 'Manuelle', 'auto' => 'Automatique']];
-	public $fuel = ['id' => 'FM_fuel', 'label' => 'Energie :'];
-	public $circulation = ['id' => 'FM_circulation', 'label' => 'Mise en circulation :', 'type' => 'date'];
-	public $color = ['id' => 'FM_color', 'label' => 'Couleur :', 'type' => 'text'];
-	public $warranty = ['id' => 'FM_warranty', 'label' => 'Garantie :', 'type' => 'text'];
-	public $width = ['id' => 'FM_width', 'label' => 'Longueur :', 'type' => 'text'];
-	public $conso = ['id' => 'FM_conso', 'label' => 'Consommation :', 'type' => 'text'];
-	public $trunk = ['id' => 'FM_trunk', 'label' => 'Volume du coffre :', 'type' => 'text'];
+	public $isSold;
+	public $type;
+	public $brand;
+	public $model;
+	public $year;
+	public $price;
+	public $km;
+	public $doorNbr;
+	public $chf;
+	public $ch;
+	public $gearbox;
+	public $fuel;
+	public $circulation;
+	public $color;
+	public $warranty;
+	public $width;
+	public $conso;
+	public $co2;
+	public $trunk;
 
 	protected $pics = [];
 
@@ -41,6 +42,8 @@ class Vehicle
 	 */
 	public function __construct( $postId )
 	{
+		$this->init();
+
 		$this->postId = $postId;
 
 		if( isset( $postId ) )
@@ -73,6 +76,29 @@ class Vehicle
 				$this->pics['FM_image' . $i] = ! empty( $picsUrl ) ? $picsUrl : FleetManager::$PLUGIN_URL . 'ressources/img/noVehicleImage.png';
 			}
 		}
+	}
+
+	public function init()
+	{
+		$this->isSold = ['id' => 'FM_isSold', 'label' => 'Vendu :', 'type' => 'checkbox'];
+		$this->type = ['id' => 'FM_type', 'label' => 'Type :'];
+		$this->brand = ['id' => 'FM_brand', 'label' => 'Marque :'];
+		$this->model = ['id' => 'FM_model', 'label' => 'Modèle' . ' :'];
+		$this->year = ['id' => 'FM_year', 'label' => 'Année :', 'type' => 'number'];
+		$this->price = ['id' => 'FM_price', 'label' => 'Prix :', 'type' => 'number'];
+		$this->km = ['id' => 'FM_km', 'label' => 'Kilométrage :', 'type' => 'number'];
+		$this->doorNbr = ['id' => 'FM_doorNbr', 'label' => 'Nombre de portes :', 'type' => 'number'];
+		$this->chf = ['id' => 'FM_chf', 'label' => 'Puissance fiscale :', 'type' => 'number'];
+		$this->ch = ['id' => 'FM_ch', 'label' => 'Puissance din :', 'type' => 'number'];
+		$this->gearbox = ['id' => 'FM_gearbox', 'label' => 'Boîte de vitesse :', 'type' => ['man' => 'Manuelle', 'auto' => 'Automatique']];
+		$this->fuel = ['id' => 'FM_fuel', 'label' => 'Energie :'];
+		$this->circulation = ['id' => 'FM_circulation', 'label' => 'Mise en circulation :', 'type' => 'date'];
+		$this->color = ['id' => 'FM_color', 'label' => 'Couleur :', 'type' => 'text'];
+		$this->warranty = ['id' => 'FM_warranty', 'label' => 'Garantie :', 'type' => 'text'];
+		$this->width = ['id' => 'FM_width', 'label' => 'Longueur :', 'type' => 'text'];
+		$this->conso = ['id' => 'FM_conso', 'label' => 'Consommation :', 'type' => 'text'];
+		$this->co2 = ['id' => 'FM_co2', 'label' => 'Emission de CO2 :', 'type' => 'text'];
+		$this->trunk = ['id' => 'FM_trunk', 'label' => 'Volume du coffre :', 'type' => 'text'];
 	}
 
 	/**
