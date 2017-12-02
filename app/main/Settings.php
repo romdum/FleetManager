@@ -92,14 +92,14 @@ class Settings
         $settings['socialNetwork'][] = [
             'id'    => 'FM_fb_appid',
             'type'  => 'input',
-            'value' => $this->getSetting( 'SocialNetwork', 'facebook', 'appId' ),
+            'value' => htmlspecialchars( $this->getSetting( 'SocialNetwork', 'facebook', 'appId' ) ),
             'class' => 'setting',
             'label' => 'Facebook App ID'
         ];
         $settings['socialNetwork'][] = [
             'id'    => 'FM_fb_appsecret',
             'type'  => 'input',
-            'value' => $this->getSetting( 'SocialNetwork', 'facebook', 'appSecret' ),
+            'value' => htmlspecialchars( $this->getSetting( 'SocialNetwork', 'facebook', 'appSecret' ) ),
             'class' => 'setting',
             'label' => 'Facebook App Secret'
         ];
@@ -141,8 +141,8 @@ class Settings
         check_admin_referer( 'FM_save_settings' );
 
         $this->setSetting( isset( $_POST['FM_facebook'] ) ? true : false, 'SocialNetwork', 'facebook', 'enabled' );
-        $this->setSetting( $_POST['FM_fb_appid'], 'SocialNetwork', 'facebook', 'appId' );
-        $this->setSetting( $_POST['FM_fb_appsecret'], 'SocialNetwork', 'facebook', 'appSecret' );
+        $this->setSetting( htmlspecialchars( $_POST['FM_fb_appid'] ), 'SocialNetwork', 'facebook', 'appId' );
+        $this->setSetting( htmlspecialchars( $_POST['FM_fb_appsecret'] ), 'SocialNetwork', 'facebook', 'appSecret' );
         $this->setSetting( isset( $_POST['FM_logger'] ) ? true : false, 'Logger', 'enabled' );
 
 	    $vehicleInfo = (new Vehicle(0))->getArrayInfos();
