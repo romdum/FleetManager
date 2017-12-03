@@ -18,30 +18,21 @@ class Settings
     	$this->settings = json_decode( get_option( self::NAME ), '' );
 
         add_action( 'admin_menu', array( $this, 'add_plugin_page' ), 10, 0 );
-        add_action( "admin_post_FM_save_settings", array( $this, 'saveSettings' ), 10, 0 );
+        add_action( 'admin_post_FM_save_settings', array( $this, 'saveSettings' ), 10, 0 );
     }
 
     public function getSetting( ...$names )
     {
-        if( is_array( $names[0] ) )
-            $names = $names[0];
-        else // first call of the function
-            $this->tmpSettings = $this->settings;
+	    $settings = Util::object_to_array( $this->settings );
 
-        $setting = $this->testSettingFormat( $this->tmpSettings );
+	    $result = $settings;
+	    for( $i = 0; $i < count( $names ); $i++ )
+		    if( isset( $result[$names[$i]] ) )
+		        $result = $result[$names[$i]];
+		    else
+		    	return null;
 
-        if( isset( $names[1] ) && isset( $setting[$names[0]] ) )
-        {
-            $this->tmpSettings = $setting[$names[0]];
-            unset( $names[0] );
-            $names = array_values( $names );
-            return $this->getSetting( $names );
-        }
-        else if( ! isset( $names[1] ) && isset( $setting[$names[0]] ) )
-        {
-            return $setting[$names[0]];
-        }
-        return null;
+	    return $result;
     }
 
     public function setSetting( $value, ...$names )
