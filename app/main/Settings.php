@@ -9,7 +9,6 @@ use FleetManager\Vehicle\Vehicle;
 class Settings
 {
     private $settings;
-    private $tmpSettings;
     
     const NAME = 'FM_settings';
 
@@ -17,6 +16,7 @@ class Settings
     {
     	$this->settings = json_decode( get_option( self::NAME ), '' );
 
+    	add_action( 'plugins_loaded', array( $this, 'testSettingFormat' ), 10, 0 );
         add_action( 'admin_menu', array( $this, 'add_plugin_page' ), 10, 0 );
         add_action( 'admin_post_FM_save_settings', array( $this, 'saveSettings' ), 10, 0 );
     }
@@ -47,17 +47,13 @@ class Settings
         eval( $cmdToExe );
 
 	    update_option( self::NAME, json_encode( $settings ) );
-        FleetManager::$notice->setNotice('Options sauvegardées.', 'success');
+        FleetManager::$notice->setNotice('Options sauvegardées.', Notice::NOTICE_SUCCESS);
     }
     
-    private function testSettingFormat( $setting = null )
+    public function testSettingFormat()
     {
-        $setting = isset( $setting ) ? $setting : $this->settings;
-
-	    if( ! is_array( $setting ) && is_object( $setting ) )
-		    return get_object_vars( $setting );
-
-	    return [];
+        if( $this->settings === null )
+	        (FleetManager::$notice->setNotice( 'Format des paramètres incorrects.', Notice::NOTICE_ERROR ))->displayNotice();
     }
     
     public function add_plugin_page()

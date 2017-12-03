@@ -5,7 +5,10 @@ namespace FleetManager;
 class Notice
 {
     const SESSION = 'FLEETMANAGER_NOTICE';
-    
+
+    const NOTICE_SUCCESS = 'success';
+    const NOTICE_ERROR   = 'error';
+
     public function __construct()
     {
         Util::session_start();
@@ -14,6 +17,8 @@ class Notice
     public function setNotice( $message, $messageType = 'error' )
     {
         $_SESSION[self::SESSION] = $message . '||' . $messageType;
+
+        return $this;
     }
     
     public function displayNotice()
