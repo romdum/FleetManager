@@ -9,6 +9,15 @@ class Install
 		if( get_option( Settings::NAME, null ) === null )
 		{
 			$options = [
+				'VehiclePostType' => [
+					'display' => [
+						'photo' => true
+					],
+					'default' => [
+						'photoNbr' => 5
+					],
+					'deletePics' => true
+				],
 				'SocialNetwork' => [
 					'facebook' => [
 						'enabled'   => false,

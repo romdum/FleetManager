@@ -2,6 +2,7 @@
 
 namespace FleetManager\Vehicle;
 
+use FleetManager\FleetManager;
 use function \FleetManager\number_format;
 use FleetManager\Util;
 
@@ -25,6 +26,9 @@ class PostType
         add_action( 'manage_vehicle_posts_custom_column', array( $this, 'loadCustomVehicleColumns' ), 10, 2 );
 
         add_action( 'save_post', array( $this, 'saveCustomFields' ), 10, 2 );
+
+        if( FleetManager::$settings->getSetting( 'VehiclePostType', 'deletePics' ) )
+            add_action( 'before_delete_post', array( $this, 'removePics' ), 10, 1 );
 
         new Taxonomy();
         new UI( $this );
@@ -65,6 +69,29 @@ class PostType
 
 	    if( isset( $_POST['FM_brand'] ) )
 		    wp_set_post_terms( $postId, term_exists( htmlspecialchars( $_POST['FM_brand'] ), 'vehicle_brand' ), 'vehicle_brand' );
+    }
+
+    public function removePics( $postId )
+    {
+        global $wpdb;
+        $pics = $wpdb->get_results("
+			SELECT meta_value 
+			FROM wr_postmeta 
+			WHERE meta_key LIKE 'FM_image%'
+			AND meta_value NOT LIKE '%noVehicleImage.png'
+			AND post_id = $postId;
+		");
+
+        foreach( $pics as $pic )
+	    {
+	        $picId = $wpdb->get_var( $wpdb->prepare("
+	            SELECT ID FROM wr_posts
+	            WHERE post_type = 'attachment'
+	            AND guid = '%s';
+	        ", $pic->meta_value ) );
+	        wp_delete_attachment( $picId );
+	    }
+
     }
 
     /**
