@@ -36,6 +36,9 @@ class FleetManager
     public static $notice;
 	public static $logger;
 
+	const PLUGIN_NAME = 'WP Fleet Manager';
+	const PLUGIN_SLUG = 'fleetmanager';
+
 	public function __construct()
     {
         self::$PLUGIN_URL = plugin_dir_url( __FILE__ );

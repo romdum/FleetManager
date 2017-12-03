@@ -8,20 +8,38 @@ use FleetManager\Vehicle\Vehicle;
  */
 class Settings
 {
-    private $settings;
-    
-    const NAME = 'FM_settings';
+	/**
+	 * Settings like they're saved in database (JSON string).
+	 * @var string
+	 */
+	private $settings;
 
+	/**
+	 * Option name (options.option_name)
+	 */
+	const NAME = 'FM_settings';
+
+	/**
+	 * Settings constructor.
+	 */
     public function __construct()
     {
     	$this->settings = json_decode( get_option( self::NAME ), '' );
 
     	add_action( 'plugins_loaded', array( $this, 'testSettingFormat' ), 10, 0 );
-        add_action( 'admin_menu', array( $this, 'add_plugin_page' ), 10, 0 );
+        add_action( 'admin_menu', array( $this, 'createSettingPage' ), 10, 0 );
         add_action( 'admin_post_FM_save_settings', array( $this, 'saveSettings' ), 10, 0 );
     }
 
-    public function getSetting( ...$names )
+	/**
+	 * Return the setting, null if setting not exists.
+	 *
+	 * @example getSetting( 'setting1', 'setting1.1', 'setting1.1.1')
+	 * @param array ...$names
+	 *
+	 * @return string|array|null
+	 */
+	public function getSetting( ...$names )
     {
 	    $settings = Util::object_to_array( $this->settings );
 
@@ -35,6 +53,12 @@ class Settings
 	    return $result;
     }
 
+	/**
+	 * Change a setting value and save it in database.
+	 *
+	 * @param $value
+	 * @param array ...$names
+	 */
     public function setSetting( $value, ...$names )
     {
         $settings = Util::object_to_array( json_decode( get_option( self::NAME ), '' ) );
@@ -49,25 +73,35 @@ class Settings
 	    update_option( self::NAME, json_encode( $settings ) );
         FleetManager::$notice->setNotice('Options sauvegardées.', Notice::NOTICE_SUCCESS);
     }
-    
+
+	/**
+	 * Method to test if JSON settings is valid.
+	 * Generate a notice if they're not.
+	 */
     public function testSettingFormat()
     {
         if( $this->settings === null )
 	        (FleetManager::$notice->setNotice( 'Format des paramètres incorrects.', Notice::NOTICE_ERROR ))->displayNotice();
     }
-    
-    public function add_plugin_page()
+
+	/**
+	 * Create the setting page.
+	 */
+    public function createSettingPage()
     {
         add_options_page(
-            'Fleet Manager',
-            'Fleet Manager',
+            FleetManager::PLUGIN_NAME,
+	        FleetManager::PLUGIN_NAME,
             'administrator',
             'fleetmanager_settings_page',
-            array( $this, 'create_admin_page' )
+            array( $this, 'displaySettingPage' )
         );
     }
-    
-    public function create_admin_page()
+
+	/**
+	 * Display the setting page (callback of createSettingPage function).
+	 */
+    public function displaySettingPage()
     {
         $settings['socialNetwork'][] = [
             'id'    => 'FM_facebook', 
@@ -111,18 +145,24 @@ class Settings
 
         include FleetManager::$PLUGIN_PATH . 'ressources/views/settingsPage.php';
     }
-    
+
+	/**
+	 * Display option template.
+	 *
+	 * @param array $optionArgs
+	 */
     protected function displayOption( $optionArgs )
     {
         foreach( $optionArgs as $args )
-        {
             if( $args['type'] === 'checkbox' )
                 include FleetManager::$PLUGIN_PATH . 'ressources/views/templates/checkboxTag.php';
             else if( $args['type'] === 'input' )
                 include FleetManager::$PLUGIN_PATH . 'ressources/views/templates/inputTag.php';
-        }
     }
-    
+
+	/**
+	 * Post request made when settings are save (on setting page).
+	 */
     public function saveSettings()
     {
         check_admin_referer( 'FM_save_settings' );
@@ -136,8 +176,7 @@ class Settings
 
 	    foreach( $vehicleInfo as $info )
             $this->setSetting( isset( $_POST[$info['id']] ) ? true : false, 'VehiclePostType', 'display', $info['id'] );
-		    
-        
+
         wp_redirect( admin_url( "options-general.php?page=fleetmanager_settings_page" ) );
     }
 }
