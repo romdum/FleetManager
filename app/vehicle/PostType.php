@@ -73,25 +73,29 @@ class PostType
 
     public function removePics( $postId )
     {
-        global $wpdb;
-        $pics = $wpdb->get_results("
-			SELECT meta_value 
-			FROM wr_postmeta 
-			WHERE meta_key LIKE 'FM_image%'
-			AND meta_value NOT LIKE '%noVehicleImage.png'
-			AND post_id = $postId;
-		");
+    	$postType = ( get_post( $postId ) )->post_type;
 
-        foreach( $pics as $pic )
+    	if( $postType === self::POST_TYPE_NAME )
 	    {
-	        $picId = $wpdb->get_var( $wpdb->prepare("
-	            SELECT ID FROM wr_posts
-	            WHERE post_type = 'attachment'
-	            AND guid = '%s';
-	        ", $pic->meta_value ) );
-	        wp_delete_attachment( $picId );
-	    }
+	        global $wpdb;
+	        $pics = $wpdb->get_results("
+				SELECT meta_value 
+				FROM wr_postmeta 
+				WHERE meta_key LIKE 'FM_image%'
+				AND meta_value NOT LIKE '%noVehicleImage.png'
+				AND post_id = $postId;
+			");
 
+	        foreach( $pics as $pic )
+		    {
+		        $picId = $wpdb->get_var( $wpdb->prepare("
+		            SELECT ID FROM wr_posts
+		            WHERE post_type = 'attachment'
+		            AND guid = '%s';
+		        ", $pic->meta_value ) );
+		        wp_delete_attachment( $picId );
+		    }
+	    }
     }
 
     /**
