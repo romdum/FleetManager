@@ -4,7 +4,6 @@ namespace FleetManager\Vehicle;
 
 use FleetManager\FleetManager;
 use function \FleetManager\number_format;
-use FleetManager\Util;
 
 require_once 'UI.php';
 require_once 'Taxonomy.php';
