@@ -7,6 +7,7 @@ namespace FleetManager;
  */
 class Logger
 {
+	const SLUG = 'FleetManager_logs';
 	const LOG_TYPE = ['error', 'info'];
 	const DAYS_NUMBER_TO_SAVE = 1;
 
@@ -17,16 +18,9 @@ class Logger
 		if( ! FleetManager::$settings->getSetting( 'Logger', 'enabled' ) )
 			return;
 
-		//$this->cleanLog();
+		$this->cleanLog();
 
 		self::$LOG_PATH = FleetManager::$PLUGIN_PATH . 'logs/';
-
-		if( ! is_dir( self::$LOG_PATH ) )
-			mkdir( self::$LOG_PATH );
-
-		foreach( self::LOG_TYPE as $logFile )
-			if( ! file_exists( self::$LOG_PATH . $logFile . date( 'Ymd' ) . '.log' ) )
-				file_put_contents( self::$LOG_PATH . $logFile . date( 'Ymd' ) . '.log' ,'[ FleetManager Log ' . ucfirst( $logFile ) . ' ]' . "\n\r" );
 	}
 
 	public function log( $message, $type = 'info' )
@@ -37,30 +31,38 @@ class Logger
 		if( ! in_array( $type, self::LOG_TYPE ) )
 			$type = 'info';
 
-		file_put_contents(
-			self::$LOG_PATH . $type . date( 'Ymd' ) . '.log',
-			$this->getPrefixMessage() . ' ' . $message . "\n\r",
-			FILE_APPEND
-		);
+		wp_insert_post([
+			'post_title'   => strtoupper( $type ),
+			'post_content' => $message,
+			'post_type'    => self::SLUG,
+		]);
 	}
 
 	private function cleanLog()
 	{
-		if( ! FleetManager::$settings->getSetting( 'Logger', 'enabled' ) )
-			return;
+		global $wpdb;
 
-		foreach( scandir( self::$LOG_PATH ) as $logFile )
-			if( is_file( $logFile ) && $this->isTooOld( $logFile ) && pathinfo( $logFile, PATHINFO_EXTENSION ) === 'log' )
-				unlink( $logFile );
+		$wpdb->query(
+			$wpdb->prepare(
+				"
+                DELETE FROM {$wpdb->prefix}posts
+				WHERE post_type = %s
+		 		AND post_date < %s
+			",
+			self::SLUG,
+			date( 'Y-m-d H:i:s', time() - 60 * 60 * 24 * self::DAYS_NUMBER_TO_SAVE ) )
+		);
 	}
 
-	private function isTooOld( $filePath )
+	public function removeAll()
 	{
-		return filemtime( $filePath ) < time() - 60 * 60 * 24 * self::DAYS_NUMBER_TO_SAVE;
-	}
-
-	private function getPrefixMessage()
-	{
-		return date( '[d/m/Y H:i:s]' );
+		global $wpdb;
+		$wpdb->query(
+			$wpdb->prepare(
+			"
+                DELETE FROM {$wpdb->prefix}posts
+				WHERE post_type = %s
+			",self::SLUG )
+		);
 	}
 }
