@@ -3,7 +3,6 @@
 namespace FleetManager\Vehicle;
 
 /**
- * test branch
  * Class to create all vehicle shortcodes.
  */
 class Shortcodes
