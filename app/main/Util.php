@@ -47,6 +47,9 @@ class Util
 	 */
 	public static function getTermsName( $taxonomyName, $only = '' )
 	{
+		if( ! taxonomy_exists( $taxonomyName ) )
+			return [];
+
 		$result = [];
 		foreach( get_terms( $taxonomyName, [ 'hide_empty' => false] ) as $term )
 		{
@@ -76,5 +79,10 @@ class Util
 		$str = str_replace('"', '\"', $str);
 
 		return $str;
+	}
+
+	public static function classLoaded( $className )
+	{
+		return in_array( $className, get_declared_classes() );
 	}
 }

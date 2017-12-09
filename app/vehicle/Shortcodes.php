@@ -7,15 +7,8 @@ namespace FleetManager\Vehicle;
  */
 class Shortcodes
 {
-	/**
-	 * @var \FleetManager\Vehicle\PostType
-	 */
-    private $postType;
-    
-    function __construct( $postType )
+    function __construct()
     {
-        $this->postType = $postType;
-        
         add_shortcode( 'FM_photo_url', array( $this, 'getPhotoUrl' ) );
         add_shortcode( 'FM_brand', array( $this, 'getBrand' ) );
         add_shortcode( 'FM_info', array( $this, 'getInfo' ) );

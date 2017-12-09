@@ -3,6 +3,7 @@
 namespace FleetManager\Vehicle;
 
 use FleetManager\FleetManager;
+use \FleetManager\Util;
 use function \FleetManager\number_format;
 
 require_once 'UI.php';
@@ -26,12 +27,13 @@ class PostType
 
         add_action( 'save_post', array( $this, 'saveCustomFields' ), 10, 2 );
 
-        if( FleetManager::$settings->getSetting( 'VehiclePostType', 'deletePics' ) )
+        if( Util::classLoaded( 'FleetManager\FleetManager' )
+            && FleetManager::$settings->getSetting( 'VehiclePostType', 'deletePics' ) )
             add_action( 'before_delete_post', array( $this, 'removePics' ), 10, 1 );
 
         new Taxonomy();
         new UI( $this );
-        new Shortcodes( $this );
+        new Shortcodes();
     }
 
     /**
@@ -72,27 +74,25 @@ class PostType
 
     public function removePics( $postId )
     {
-    	$postType = ( get_post( $postId ) )->post_type;
+    	$postType = get_post_type( $postId );
 
     	if( $postType === self::POST_TYPE_NAME )
 	    {
 	        global $wpdb;
-	        $pics = $wpdb->get_results("
-				SELECT meta_value 
-				FROM wr_postmeta 
-				WHERE meta_key LIKE 'FM_image%'
-				AND meta_value NOT LIKE '%noVehicleImage.png'
-				AND post_id = $postId;
-			");
+	        $pics = ( new Vehicle( $postId ) )->getPics();
 
 	        foreach( $pics as $pic )
 		    {
-		        $picId = $wpdb->get_var( $wpdb->prepare("
-		            SELECT ID FROM wr_posts
-		            WHERE post_type = 'attachment'
-		            AND guid = '%s';
-		        ", $pic->meta_value ) );
-		        wp_delete_attachment( $picId );
+			    if( basename( $pic ) !== 'noVehicleImage.png' )
+			    {
+				    $picId = $wpdb->get_var( $wpdb->prepare("
+			            SELECT ID FROM {$wpdb->posts}
+			            WHERE post_type = 'attachment'
+			            AND guid = '%s';
+			        ", $pic ) );
+
+				    wp_delete_attachment( $picId );
+			    }
 		    }
 	    }
     }
