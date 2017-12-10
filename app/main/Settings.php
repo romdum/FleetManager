@@ -36,10 +36,10 @@ class Settings
     }
 
 	/**
-	 * Return the setting, null if setting not exists.
+	 * Return the setting, null if setting not exists, all settings if no parameter given.
 	 *
 	 * @example getSetting( 'setting1', 'setting1.1', 'setting1.1.1')
-	 * @param array ...$names
+	 * @param array[string] ...$names
 	 *
 	 * @return string|array|null
 	 */
@@ -49,7 +49,7 @@ class Settings
 
 	    $result = $settings;
 	    for( $i = 0; $i < count( $names ); $i++ )
-		    if( isset( $result[$names[$i]] ) )
+		    if( is_string( $names[$i] ) && isset( $result[$names[$i]] ) )
 		        $result = $result[$names[$i]];
 		    else
 		    	return null;
@@ -61,21 +61,30 @@ class Settings
 	 * Change a setting value and save it in database.
 	 *
 	 * @param $value
-	 * @param array ...$names
+	 * @param array[string] ...$names
 	 */
     public function setSetting( $value, ...$names )
     {
+    	if( ! isset( $names ) || ! is_array( $names ) || empty( $names ) )
+    		return;
+
         $settings = Util::object_to_array( json_decode( get_option( self::NAME ), '' ) );
         
         $cmdToExe = '$settings';
         for( $i = 0; $i < count( $names ); $i++ )
-            $cmdToExe .= '[$names[' . $i . ']]';
+	        if( is_string( $names[$i] ) )
+                $cmdToExe .= '[$names[' . $i . ']]';
+            else
+            	return;
         $cmdToExe .= ' = $value;';
 
         eval( $cmdToExe );
 
-	    update_option( self::NAME, json_encode( $settings ) );
-        FleetManager::$notice->setNotice('Options sauvegardées.', Notice::NOTICE_SUCCESS);
+	    if( update_option( self::NAME, json_encode( $settings ) ) )
+			$this->settings = $settings;
+
+	    if( Util::classLoaded( 'FleetManager\FleetManager' ) && FleetManager::$notice !== null )
+            FleetManager::$notice->setNotice('Options sauvegardées.', Notice::NOTICE_SUCCESS);
     }
 
 	/**
@@ -92,7 +101,7 @@ class Settings
     {
 	    if( get_option( Settings::NAME, null ) === null )
 	    {
-		    $options = [
+		    $defaultSettings = [
 			    'VehiclePostType' => [
 				    'display' => [
 					    'photo' => true
@@ -114,7 +123,8 @@ class Settings
 			    ]
 		    ];
 
-		    add_option( Settings::NAME, json_encode( $options ) );
+		    add_option( Settings::NAME, json_encode( $defaultSettings ) );
+		    $this->settings = json_decode( json_encode( $defaultSettings ) );
 	    }
     }
 }

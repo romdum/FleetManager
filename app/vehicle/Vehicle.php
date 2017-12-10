@@ -51,7 +51,7 @@ class Vehicle
 			$infos = $this->getArrayInfos();
 			$postMeta = get_post_meta( $postId );
 			$parent = get_the_terms( get_post( $postId ), 'vehicle_brand' );
-			$parent = $parent !== false ? $parent[0]->slug : '';
+			$parent = $parent !== false && ! is_wp_error( $parent ) ? $parent[0]->slug : '';
 
 			foreach( $infos as $info )
 				$this->{substr( $info['id'], 3 )}['value'] = isset( $postMeta[$info['id']] ) ? $postMeta[$info['id']][0] : '';
@@ -64,16 +64,23 @@ class Vehicle
 			$this->brand['type'] = Util::getTermsName('vehicle_brand', 'parent');
 
 			$type = get_the_terms( get_post( $postId ), 'vehicle_type' );
-			$this->type['value'] = $type !== false ? $type[0]->slug : '';
+			$this->type['value'] = $type !== false && ! is_wp_error( $type ) ? $type[0]->slug : '';
 			$this->type['type'] = Util::getTermsName('vehicle_type');
 
-			$picsNbr = FleetManager::$settings->getSetting( 'VehiclePostType','default','photoNbr' );
-			$picsNbr = $picsNbr === null ? 5 : $picsNbr;
+			$picsNbr = 5;
+			if( Util::classLoaded( 'FleetManager\FleetManager' ) )
+				$picsNbr = FleetManager::$settings->getSetting( 'VehiclePostType','default','photoNbr' );
 
 			for( $i = 1; $i <= $picsNbr; $i++ )
 			{
 				$picsUrl = get_post_meta( $postId, 'FM_image' . $i, true );
-				$this->pics['FM_image' . $i] = ! empty( $picsUrl ) ? $picsUrl : FleetManager::$PLUGIN_URL . 'ressources/img/noVehicleImage.png';
+				if( empty( $picsUrl ) )
+					if( Util::classLoaded( 'FleetManager\FleetManager' ) )
+						$this->pics['FM_image' . $i] = FleetManager::$PLUGIN_URL . 'ressources/img/noVehicleImage.png';
+					else
+						$this->pics['FM_image' . $i] = '';
+				else
+					$this->pics['FM_image' . $i] = $picsUrl;
 			}
 		}
 	}
