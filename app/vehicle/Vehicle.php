@@ -11,27 +11,30 @@ use FleetManager\FleetManager;
  */
 class Vehicle
 {
-	protected $postId;
+	const IS_SOLD     = 'isSold';
+	const TYPE        = 'type';
+	const BRAND       = 'brand';
+	const MODEL       = 'model';
+	const YEAR        = 'year';
+	const PRICE       = 'price';
+	const KM          = 'km';
+	const DOOR_NBR    = 'doorNbr';
+	const CHF         = 'chf';
+	const CH          = 'ch';
+	const GEARBOX     = 'gearbox';
+	const FUEL        = 'fuel';
+	const CIRCULATION = 'circulation';
+	const COLOR       = 'color';
+	const WARRANTY    = 'warranty';
+	const WIDTH       = 'width';
+	const CONSO       = 'conso';
+	const CO2         = 'co2';
+	const TRUNK       = 'trunk';
 
-	public $isSold;
-	public $type;
-	public $brand;
-	public $model;
-	public $year;
-	public $price;
-	public $km;
-	public $doorNbr;
-	public $chf;
-	public $ch;
-	public $gearbox;
-	public $fuel;
-	public $circulation;
-	public $color;
-	public $warranty;
-	public $width;
-	public $conso;
-	public $co2;
-	public $trunk;
+	const PREFIX      = 'FM_';
+	const PICS        = 'image';
+
+	protected $postId;
 
 	protected $pics = [];
 
@@ -42,70 +45,105 @@ class Vehicle
 	 */
 	public function __construct( $postId )
 	{
-		$this->init();
-
 		$this->postId = $postId;
+
+		$this->initIds();
+
+		$this->initLabels();
+		$this->initTypes();
 
 		if( isset( $postId ) )
 		{
-			$infos = $this->getArrayInfos();
-			$postMeta = get_post_meta( $postId );
-			$parent = get_the_terms( get_post( $postId ), 'vehicle_brand' );
-			$parent = $parent !== false && ! is_wp_error( $parent ) ? $parent[0]->slug : '';
-
-			foreach( $infos as $info )
-				$this->{substr( $info['id'], 3 )}['value'] = isset( $postMeta[$info['id']] ) ? $postMeta[$info['id']][0] : '';
-
-			$this->fuel['type'] = VehicleUtil::getFuelType();
-
-			$this->model['value'] = isset( $postMeta['FM_model'] ) ? $postMeta['FM_model'][0] : '';
-			$this->model['type'] = Util::getTermsName('vehicle_brand', $parent ? $parent : 'no_brand_given' );
-
-			$this->brand['type'] = Util::getTermsName('vehicle_brand', 'parent');
-
-			$type = get_the_terms( get_post( $postId ), 'vehicle_type' );
-			$this->type['value'] = $type !== false && ! is_wp_error( $type ) ? $type[0]->slug : '';
-			$this->type['type'] = Util::getTermsName('vehicle_type');
-
-			$picsNbr = 5;
-			if( Util::classLoaded( 'FleetManager\FleetManager' ) )
-				$picsNbr = FleetManager::$settings->getSetting( 'VehiclePostType','default','photoNbr' );
-
-			for( $i = 1; $i <= $picsNbr; $i++ )
-			{
-				$picsUrl = get_post_meta( $postId, 'FM_image' . $i, true );
-				if( empty( $picsUrl ) )
-					if( Util::classLoaded( 'FleetManager\FleetManager' ) )
-						$this->pics['FM_image' . $i] = FleetManager::$PLUGIN_URL . 'ressources/img/noVehicleImage.png';
-					else
-						$this->pics['FM_image' . $i] = '';
-				else
-					$this->pics['FM_image' . $i] = $picsUrl;
-			}
+			$this->initValues();
+			$this->initPics();
 		}
 	}
 
-	public function init()
+	public function initIds()
 	{
-		$this->isSold = ['id' => 'FM_isSold', 'label' => 'Vendu :', 'type' => 'checkbox'];
-		$this->type = ['id' => 'FM_type', 'label' => 'Type :'];
-		$this->brand = ['id' => 'FM_brand', 'label' => 'Marque :'];
-		$this->model = ['id' => 'FM_model', 'label' => 'Modèle' . ' :'];
-		$this->year = ['id' => 'FM_year', 'label' => 'Année :', 'type' => 'number'];
-		$this->price = ['id' => 'FM_price', 'label' => 'Prix :', 'type' => 'number'];
-		$this->km = ['id' => 'FM_km', 'label' => 'Kilométrage :', 'type' => 'number'];
-		$this->doorNbr = ['id' => 'FM_doorNbr', 'label' => 'Nombre de portes :', 'type' => 'number'];
-		$this->chf = ['id' => 'FM_chf', 'label' => 'Puissance fiscale :', 'type' => 'number'];
-		$this->ch = ['id' => 'FM_ch', 'label' => 'Puissance din :', 'type' => 'number'];
-		$this->gearbox = ['id' => 'FM_gearbox', 'label' => 'Boîte de vitesse :', 'type' => ['man' => 'Manuelle', 'auto' => 'Automatique']];
-		$this->fuel = ['id' => 'FM_fuel', 'label' => 'Energie :'];
-		$this->circulation = ['id' => 'FM_circulation', 'label' => 'Mise en circulation :', 'type' => 'date'];
-		$this->color = ['id' => 'FM_color', 'label' => 'Couleur :', 'type' => 'text'];
-		$this->warranty = ['id' => 'FM_warranty', 'label' => 'Garantie :', 'type' => 'text'];
-		$this->width = ['id' => 'FM_width', 'label' => 'Longueur :', 'type' => 'text'];
-		$this->conso = ['id' => 'FM_conso', 'label' => 'Consommation :', 'type' => 'text'];
-		$this->co2 = ['id' => 'FM_co2', 'label' => 'Emission de CO2 :', 'type' => 'text'];
-		$this->trunk = ['id' => 'FM_trunk', 'label' => 'Volume du coffre :', 'type' => 'text'];
+		foreach( $this->getProperties() as $id )
+			$this->{$id}['id'] = self::PREFIX . $id;
+	}
+
+	private function initTypes()
+	{
+		$parent = get_the_terms( get_post( $this->postId ), 'vehicle_brand' );
+		$parent = $parent !== false && ! is_wp_error( $parent ) ? $parent[0]->slug : '';
+
+		$this->{self::IS_SOLD}['type']     = 'checkbox';
+		$this->{self::TYPE}['type']        = Util::getTermsName('vehicle_type');
+		$this->{self::BRAND}['type']       = Util::getTermsName('vehicle_brand', 'parent');
+		$this->{self::MODEL}['type']       = Util::getTermsName('vehicle_brand', $parent ? $parent : 'no_brand_given' );
+		$this->{self::YEAR}['type']        = 'number';
+		$this->{self::PRICE}['type']       = 'number';
+		$this->{self::KM}['type']          = 'number';
+		$this->{self::DOOR_NBR}['type']    = 'number';
+		$this->{self::CHF}['type']         = 'number';
+		$this->{self::CH}['type']          = 'number';
+		$this->{self::GEARBOX}['type']     = ['man' => __( 'Manuelle' ), 'auto' => __( 'Automatique' )];
+		$this->{self::FUEL}['type']        = VehicleUtil::getFuelType();
+		$this->{self::CIRCULATION}['type'] = 'date';
+		$this->{self::COLOR}['type']       = 'text';
+		$this->{self::WARRANTY}['type']    = 'text';
+		$this->{self::WIDTH}['type']       = 'text';
+		$this->{self::CONSO}['type']       = 'text';
+		$this->{self::CO2}['type']         = 'text';
+		$this->{self::TRUNK}['type']       = 'text';
+	}
+
+	private function initLabels()
+	{
+		$this->{self::IS_SOLD}['label']     = __( 'Vendu' ) . ' :';
+		$this->{self::TYPE}['label']        = __( 'Type' ) . ' :';
+		$this->{self::BRAND}['label']       = __( 'Marque' ) . ' :';
+		$this->{self::MODEL}['label']       = __( 'Modèle' ) . ' :';
+		$this->{self::YEAR}['label']        = __( 'Année' ) . ' :';
+		$this->{self::PRICE}['label']       = __( 'Prix' ) . ' :';
+		$this->{self::KM}['label']          = __( 'Kilométrage' ) . ' :';
+		$this->{self::DOOR_NBR}['label']    = __( 'Nombre de portes' ) . ' :';
+		$this->{self::CHF}['label']         = __( 'Puissance fiscale' ) . ' :';
+		$this->{self::CH}['label']          = __( 'Puissance din' ) . ' :';
+		$this->{self::GEARBOX}['label']     = __( 'Boîte de vitesse' ) . ' :';
+		$this->{self::FUEL}['label']        = __( 'Energie' ) . ' :';
+		$this->{self::CIRCULATION}['label'] = __( 'Mise en circulation' ) . ' :';
+		$this->{self::COLOR}['label']       = __( 'Couleur' ) . ' :';
+		$this->{self::WARRANTY}['label']    = __( 'Garantie' ) . ' :';
+		$this->{self::WIDTH}['label']       = __( 'Longueur' ) . ' :';
+		$this->{self::CONSO}['label']       = __( 'Consommation' ) . ' :';
+		$this->{self::CO2}['label']         = __( 'Emission de CO2' ) . ' :';
+		$this->{self::TRUNK}['label']       = __( 'Volume du coffre' ) . ' :';
+	}
+
+	private function initPics()
+	{
+		$picsNbr = 5;
+		if( Util::classLoaded( 'FleetManager\FleetManager' ) )
+			$picsNbr = FleetManager::$settings->getSetting( 'VehiclePostType','default','photoNbr' );
+
+		for( $i = 1; $i <= $picsNbr; $i++ )
+		{
+			$picsUrl = get_post_meta( $this->postId, self::PREFIX . self::PICS . $i, true );
+			if( empty( $picsUrl ) )
+				if( Util::classLoaded( 'FleetManager\FleetManager' ) )
+					$this->pics[self::PREFIX . self::PICS . $i] = FleetManager::$PLUGIN_URL . 'ressources/img/noVehicleImage.png';
+				else
+					$this->pics[self::PREFIX . self::PICS . $i] = '';
+			else
+				$this->pics[self::PREFIX . self::PICS . $i] = $picsUrl;
+		}
+	}
+
+	public function initValues()
+	{
+		$postMeta = get_post_meta( $this->postId );
+
+		foreach( $this->getProperties() as $id )
+			$this->{$id}['value'] = isset( $postMeta[self::PREFIX . $id] ) ? $postMeta[self::PREFIX . $id][0] : '';
+
+		$this->{self::MODEL}['value'] = isset( $postMeta[self::PREFIX . self::MODEL] ) ? $postMeta[self::PREFIX . self::MODEL][0] : '';
+
+		$type = get_the_terms( get_post( $this->postId ), 'vehicle_type' );
+		$this->{self::TYPE}['value'] = $type !== false && ! is_wp_error( $type ) ? $type[0]->slug : '';
 	}
 
 	/**
@@ -133,11 +171,21 @@ class Vehicle
 	 */
 	public function isSold()
 	{
-		return $this->isSold['value'] === 'on';
+		return $this->{self::IS_SOLD}['value'] === 'on';
 	}
 
 	public function getPostId()
 	{
 		return $this->postId;
+	}
+
+	public function getProperties( $withPrefix = false )
+	{
+		$consts = ( new \ReflectionClass( get_class( $this ) ) )->getConstants();
+
+		if( $withPrefix )
+			return array_diff( array_map( function( $v ){return self::PREFIX . $v;}, $consts ), [self::PREFIX, self::PICS] );
+		else
+			return array_diff( $consts, [self::PREFIX, self::PICS] );
 	}
 }

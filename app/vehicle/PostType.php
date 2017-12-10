@@ -117,8 +117,8 @@ class PostType
 
     /**
      * This method will load the custom columns data.
-     * @param  array $column
-     * @param  int   $postId
+     * @param  string $column
+     * @param  int    $postId
      */
     function loadCustomVehicleColumns( $column, $postId )
     {
