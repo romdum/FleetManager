@@ -129,4 +129,19 @@ class PostType_Test extends WP_UnitTestCase
 			'meta_input'   => $meta
 		]);
 	}
+
+	/**
+	 * @covers PostType::loadCustomVehicleColumns
+	 * @test
+	 */
+	public function loadCustomVehicleColumns()
+	{
+		$this->expectOutputString('2000');
+
+		$postId = $this->addVehicleToDb( 'title', 'content', [
+			'FM_year' => '2000'
+		]);
+
+		$this->postType->loadCustomVehicleColumns( 'FM_year', $postId );
+	}
 }
