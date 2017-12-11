@@ -11,19 +11,10 @@ use \FleetManager\FleetManager;
 class UI
 {
 	/**
-	 * @var \FleetManager\Vehicle\PostType
-	 */
-    private $VehiclePostType;
-
-	/**
 	 * UI constructor.
-	 *
-	 * @param \FleetManager\Vehicle\PostType $VehiclePostType
 	 */
-    public function __construct( $VehiclePostType )
+    public function __construct()
     {
-        $this->VehiclePostType = $VehiclePostType;
-
         add_action( 'wp_ajax_displayModels', array( $this, 'displayModels' ), 10, 0 );
         
         add_action( 'admin_enqueue_scripts', array( $this, 'loadScripts' ), 10, 1 );

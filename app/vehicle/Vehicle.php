@@ -176,9 +176,9 @@ class Vehicle
 		return $this->postId;
 	}
 
-	public function getProperties( $withPrefix = false )
+	public static function getProperties( $withPrefix = false )
 	{
-		$consts = ( new \ReflectionClass( get_class( $this ) ) )->getConstants();
+		$consts = ( new \ReflectionClass( 'FleetManager\Vehicle\Vehicle' ) )->getConstants();
 
 		if( $withPrefix )
 			return array_diff( array_map( function( $v ){return self::PREFIX . $v;}, $consts ), [self::PREFIX, self::PICS] );
