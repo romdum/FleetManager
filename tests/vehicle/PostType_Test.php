@@ -50,7 +50,7 @@ class PostType_Test extends WP_UnitTestCase
 	 */
 	public function saveCustomFields()
 	{
-		$this->markTestIncomplete( 'saveCustomFields test not implement yet.' );
+		$this->markTestIncomplete( 'PostType_Test::saveCustomFields test not implement yet.' );
 	}
 
 	/**

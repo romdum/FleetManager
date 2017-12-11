@@ -3,6 +3,9 @@
 namespace FleetManager\Tests;
 
 use FleetManager\Vehicle\Shortcodes;
+use PHPUnit\Util\Test;
+
+require_once getenv( 'WP_DEVELOP_DIR' ) . 'src/wp-content/plugins/FleetManager/tests/TestUtil.php';
 
 require_once getenv( 'WP_DEVELOP_DIR' ) . 'src/wp-content/plugins/FleetManager/app/main/Settings.php';
 require_once getenv( 'WP_DEVELOP_DIR' ) . 'src/wp-content/plugins/FleetManager/app/main/Util.php';
@@ -26,7 +29,7 @@ class Shortcodes_Test extends \WP_UnitTestCase
 	 */
 	public function getPhotoUrl()
 	{
-		$postId = $this->addVehicleToDb();
+		$postId = TestUtil::addVehicleToDb();
 
 		$this->assertEmpty( do_shortcode( '[FM_photo_url]' ) );
 		$this->assertEmpty( do_shortcode( '[FM_photo_url photo_id="1"]' ) );
@@ -36,10 +39,10 @@ class Shortcodes_Test extends \WP_UnitTestCase
 		$this->assertEmpty( do_shortcode( "[FM_photo_url photo_id='' post_id='$postId']" ) );
 		$this->assertEmpty( do_shortcode( "[FM_photo_url photo_id=null post_id='$postId']" ) );
 
-		$this->assertEquals( 'url/to/image/1.jpg', do_shortcode( "[FM_photo_url post_id='$postId']" ) );
-		$this->assertEquals( do_shortcode( "[FM_photo_url post_id='$postId']" ), 'url/to/image/1.jpg' );
-		$this->assertEquals( do_shortcode( "[FM_photo_url photo_id='1' post_id='$postId']" ), 'url/to/image/1.jpg' );
-		$this->assertEquals( do_shortcode( "[FM_photo_url photo_id='2' post_id='$postId']" ), 'url/to/image/2.jpg' );
+		$this->assertEquals( TestUtil::IMAGE1, do_shortcode( "[FM_photo_url post_id='$postId']" ) );
+		$this->assertEquals( do_shortcode( "[FM_photo_url post_id='$postId']" ), TestUtil::IMAGE1 );
+		$this->assertEquals( do_shortcode( "[FM_photo_url photo_id='1' post_id='$postId']" ), TestUtil::IMAGE1 );
+		$this->assertEquals( do_shortcode( "[FM_photo_url photo_id='2' post_id='$postId']" ), TestUtil::IMAGE2 );
 	}
 
 	/**
@@ -51,13 +54,13 @@ class Shortcodes_Test extends \WP_UnitTestCase
 	public function getPhotoUrlInLoop()
 	{
 		global $post;
-		$postId = $this->addVehicleToDb();
+		$postId = TestUtil::addVehicleToDb();
 		$post = get_post( $postId ); // same as loop instance
 
-		$this->assertEquals( 'url/to/image/1.jpg', do_shortcode( '[FM_photo_url]' ) );
-		$this->assertEquals( 'url/to/image/1.jpg', do_shortcode( "[FM_photo_url post_id='$postId']" ) );
-		$this->assertEquals( 'url/to/image/1.jpg', do_shortcode( "[FM_photo_url photo_id='1' post_id='$postId']" ) );
-		$this->assertEquals( 'url/to/image/2.jpg', do_shortcode( "[FM_photo_url photo_id='2' post_id='$postId']" ) );
+		$this->assertEquals( TestUtil::IMAGE1, do_shortcode( '[FM_photo_url]' ) );
+		$this->assertEquals( TestUtil::IMAGE1, do_shortcode( "[FM_photo_url post_id='$postId']" ) );
+		$this->assertEquals( TestUtil::IMAGE1, do_shortcode( "[FM_photo_url photo_id='1' post_id='$postId']" ) );
+		$this->assertEquals( TestUtil::IMAGE2, do_shortcode( "[FM_photo_url photo_id='2' post_id='$postId']" ) );
 
 		$this->assertEmpty( do_shortcode( "[FM_photo_url photo_id='-1' post_id='$postId']" ) );
 		$this->assertEmpty( do_shortcode( '[FM_photo_url photo_id="1" post_id="-1"]' ) );
@@ -73,10 +76,10 @@ class Shortcodes_Test extends \WP_UnitTestCase
 	 */
 	public function getInfo()
 	{
-		$postId = $this->addVehicleToDb();
+		$postId = TestUtil::addVehicleToDb();
 
-		$this->assertEquals( 'red', do_shortcode( "[FM_info info_name='color' post_id='$postId']" ) );
-		$this->assertEquals( '2006', do_shortcode( "[FM_info info_name='year' post_id='$postId']" ) );
+		$this->assertEquals( TestUtil::COLOR, do_shortcode( "[FM_info info_name='color' post_id='$postId']" ) );
+		$this->assertEquals( TestUtil::YEAR, do_shortcode( "[FM_info info_name='year' post_id='$postId']" ) );
 
 		$this->assertEmpty( do_shortcode( "[FM_info post_id='$postId']" ) );
 		$this->assertEmpty( do_shortcode( "[FM_info]" ) );
@@ -93,12 +96,12 @@ class Shortcodes_Test extends \WP_UnitTestCase
 	public function getInfoInLoop()
 	{
 		global $post;
-		$postId = $this->addVehicleToDb();
+		$postId = TestUtil::addVehicleToDb();
 		$post = get_post( $postId ); // same as loop instance
 
-		$this->assertEquals( 'red', do_shortcode( "[FM_info info_name='color' post_id='$postId']" ) );
-		$this->assertEquals( '2006', do_shortcode( "[FM_info info_name='year' post_id='$postId']" ) );
-		$this->assertEquals( 'red', do_shortcode( "[FM_info info_name='color']" ) );
+		$this->assertEquals( TestUtil::COLOR, do_shortcode( "[FM_info info_name='color' post_id='$postId']" ) );
+		$this->assertEquals( TestUtil::YEAR, do_shortcode( "[FM_info info_name='year' post_id='$postId']" ) );
+		$this->assertEquals( TestUtil::COLOR, do_shortcode( "[FM_info info_name='color']" ) );
 
 		$this->assertEmpty( do_shortcode( "[FM_info post_id='$postId']" ) );
 		$this->assertEmpty( do_shortcode( "[FM_info]" ) );
@@ -113,7 +116,7 @@ class Shortcodes_Test extends \WP_UnitTestCase
 	 */
 	public function getOption()
 	{
-		$this->markTestIncomplete( 'getOption test not implements yet.' );
+		$this->markTestIncomplete( 'Shortcodes::getOption test not implements yet.' );
 	}
 
 	/**
@@ -124,7 +127,7 @@ class Shortcodes_Test extends \WP_UnitTestCase
 	 */
 	public function getOptionInLoop()
 	{
-		$this->markTestIncomplete( 'getOptionInLoop test not implements yet.' );
+		$this->markTestIncomplete( 'Shortcodes::getOptionInLoop test not implements yet.' );
 	}
 
 	public function addVehicleToDb()
