@@ -67,6 +67,9 @@ class Vehicle
 
 	private function initTypes()
 	{
+		foreach( $this->getProperties() as $property ) // all field are text type by default
+			$this->{$property}['type'] = 'text';
+
 		$parent = get_the_terms( get_post( $this->postId ), 'vehicle_brand' );
 		$parent = $parent !== false && ! is_wp_error( $parent ) ? $parent[0]->slug : '';
 
@@ -83,12 +86,6 @@ class Vehicle
 		$this->{self::GEARBOX}['type']     = ['man' => __( 'Manuelle' ), 'auto' => __( 'Automatique' )];
 		$this->{self::FUEL}['type']        = VehicleUtil::getFuelType();
 		$this->{self::CIRCULATION}['type'] = 'date';
-		$this->{self::COLOR}['type']       = 'text';
-		$this->{self::WARRANTY}['type']    = 'text';
-		$this->{self::WIDTH}['type']       = 'text';
-		$this->{self::CONSO}['type']       = 'text';
-		$this->{self::CO2}['type']         = 'text';
-		$this->{self::TRUNK}['type']       = 'text';
 	}
 
 	private function initLabels()
