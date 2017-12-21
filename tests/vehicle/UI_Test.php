@@ -1,12 +1,13 @@
 <?php
 
-namespace FleetManager\Tests;
+namespace FleetManager\Tests\Vehicle;
 
 use FleetManager\FleetManager;
 use FleetManager\Util;
 use FleetManager\Vehicle\UI;
 use FleetManager\Vehicle\Vehicle;
 use FleetManager\Vehicle\Util as VehicleUtil;
+use FleetManager\Tests\TestUtil;
 
 require_once getenv( 'WP_DEVELOP_DIR' ) . 'src/wp-content/plugins/FleetManager/tests/TestUtil.php';
 
@@ -18,7 +19,6 @@ class UI_Test extends \WP_UnitTestCase
 {
 	private $fleetManager;
 	private $ui;
-	private $postId;
 
 	public function __construct()
 	{

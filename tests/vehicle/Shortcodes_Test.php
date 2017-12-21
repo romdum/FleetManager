@@ -1,9 +1,9 @@
 <?php
 
-namespace FleetManager\Tests;
+namespace FleetManager\Tests\Vehicle;
 
 use FleetManager\Vehicle\Shortcodes;
-use PHPUnit\Util\Test;
+use FleetManager\Tests\TestUtil;
 
 require_once getenv( 'WP_DEVELOP_DIR' ) . 'src/wp-content/plugins/FleetManager/tests/TestUtil.php';
 

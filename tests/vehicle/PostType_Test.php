@@ -1,6 +1,6 @@
 <?php
 
-namespace FleetManager\Tests;
+namespace FleetManager\Tests\Vehicle;
 
 use FleetManager\Vehicle\PostType;
 use \WP_UnitTestCase;
