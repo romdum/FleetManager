@@ -93,7 +93,7 @@ class Settings
 	 */
     public function testSettingFormat()
     {
-        if( $this->settings === null )
+        if( $this->settings === null && FleetManager::$notice !== null )
 	        (FleetManager::$notice->setNotice( 'Format des paramètres incorrects.', Notice::NOTICE_ERROR ))->displayNotice();
     }
 

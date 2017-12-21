@@ -32,7 +32,7 @@ class PostType
             add_action( 'before_delete_post', array( $this, 'removePics' ), 10, 1 );
 
         new Taxonomy();
-        new UI( $this );
+        new UI();
         new Shortcodes();
     }
 
