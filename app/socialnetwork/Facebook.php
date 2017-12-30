@@ -7,6 +7,7 @@ use \Facebook\Authentication\AccessToken as FbTokenAPI;
 
 use \FleetManager\Util;
 use \FleetManager\FleetManager;
+use FleetManager\Vehicle\PostType;
 
 
 /**
@@ -49,7 +50,7 @@ class Facebook
 
         add_filter( 'views_edit-vehicle', array( $this, 'addConnectionButton' ), 10, 1 );
 
-        add_action( 'save_post', array( $this, 'publish'), 10, 3 );
+        add_action( 'save_post_' . PostType::POST_TYPE_NAME, array( $this, 'publish'), 10, 3 );
     }
 
 	/**
